@@ -42,4 +42,21 @@ public class AsyncDeclarativeHotelController {
         return all;
     }
 
+    @GetMapping("findAll3")
+    Flux<Hotel> findAll3() {
+        LOG.info("entering find all");
+        Flux<Hotel> all = hotelService.findAll3();
+        LOG.info("returning flux");
+        return all;
+    }
+
+    @GetMapping("findAll4")
+    Flux<Hotel> findAll4() {
+        LOG.info("entering find all");
+        Flux<Hotel> all = hotelService.findAll4();
+        LOG.info("returning flux");
+        return all;
+    }
+
+
 }

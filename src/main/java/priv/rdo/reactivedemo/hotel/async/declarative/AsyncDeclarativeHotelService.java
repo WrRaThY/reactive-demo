@@ -61,4 +61,21 @@ public class AsyncDeclarativeHotelService {
         });
     }
 
+    public Flux<Hotel> findAll3() {
+        FakeHotelGenerator generator = new FakeHotelGenerator();
+        return Mono.just(generator.generateHotel()) //don't use it like that. it will just send the same data over and over again
+                .delayElement(Duration.ofSeconds(2))
+                .repeat(3);
+    }
+
+    public Flux<Hotel> findAll4() {
+        FakeHotelGenerator generator = new FakeHotelGenerator();
+        return Mono.fromCallable(generator::generateHotel)
+                .log() //TODO: this taps into onNext/onComplete and so on somehow. code leads to onAssembly. dig deeper
+                .doOnEach(item -> LOG.info("hotel added to flux {}", item.get()))
+                .delayElement(Duration.ofSeconds(2))
+                .repeat(3);
+    }
+
+
 }

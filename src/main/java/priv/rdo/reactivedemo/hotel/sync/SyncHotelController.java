@@ -1,5 +1,6 @@
 package priv.rdo.reactivedemo.hotel.sync;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,10 @@ public class SyncHotelController {
     }
 
     @GetMapping("{id}")
-    /**
-     * yes, its still 200 if response is empty
-     */
-    Mono<Hotel> findById(@PathVariable long id) {
-        return Mono.justOrEmpty(hotelService.findByIdFromUsualSource(id));
+    Mono<ResponseEntity<Hotel>> findById(@PathVariable long id) {
+        return Mono.justOrEmpty(hotelService.findByIdFromUsualSource(id))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping
